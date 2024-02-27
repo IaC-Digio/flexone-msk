@@ -1,7 +1,7 @@
 variable "username" {
   type = string
   validation {
-    condition     = var.username != ""
+    condition     = var.username != null
     error_message = "necessario informar o nome de usuario de conexao no MSK"
   }
 }
@@ -20,7 +20,7 @@ variable "log_group_retention" {
 variable "secret_name" {
   type = string
   validation {
-    condition     = var.secret_name != ""
+    condition     = var.secret_name != null
     error_message = "necessario informar o nome do Secrets Manager para armazenamento da senha do usuario de conexao no MSK"
   }
 }
@@ -38,7 +38,7 @@ variable "tags" {
 variable "cloudwatch_log_group_name" {
   type = string
   validation {
-    condition     = var.cloudwatch_log_group_name != ""
+    condition     = var.cloudwatch_log_group_name != null
     error_message = "necessario informar o nome do Cloud Watch Log Group para armazenamento dos logs do cluster"
   }
 }
@@ -47,7 +47,7 @@ variable "vpc_id" {
   type = string
   default = null
   validation {
-    condition     = var.vpc_id != ""
+    condition     = var.vpc_id != null
     error_message = "necessario informar o VPC ID"
   }
 }
@@ -95,7 +95,7 @@ variable "create_sg" {
 variable "security_group_name" {
   type = string
   validation {
-    condition     = var.security_group_name != ""
+    condition     = var.security_group_name != null
     error_message = "necessario o nome do security group do cluster"
   }
 }
@@ -108,7 +108,7 @@ variable "cluster_name" {
   type    = string
   default = null
   validation {
-    condition     = var.cluster_name != ""
+    condition     = var.cluster_name != null
     error_message = "necessario informar o nome do cluster"
   }
 }
@@ -117,7 +117,7 @@ variable "cluster_version" {
   type    = string
   default = null
   validation {
-    condition     = var.cluster_version != ""
+    condition     = var.cluster_version != null
     error_message = "necessario informar a versao do cluster"
   }
 }
@@ -126,7 +126,7 @@ variable "instance_type" {
   type    = string
   default = null
   validation {
-    condition     = var.instance_type != ""
+    condition     = var.instance_type != null
     error_message = "necessario informar o tipo de instancia do cluster"
   }
 }
@@ -135,7 +135,7 @@ variable "volume_size" {
   type    = number
   default = null
   validation {
-    condition     = var.volume_size != ""
+    condition     = var.volume_size != null
     error_message = "necessario informar o tamanho do disco do cluster"
   }
 }
@@ -144,7 +144,16 @@ variable "node_numbers" {
   type    = number
   default = null
   validation {
-    condition     = var.node_numbers != ""
+    condition     = var.node_numbers != null
     error_message = "necessario informar a quantidade de nodes do cluster"
+  }
+}
+
+variable "region" {
+  type = string
+  default = null
+  validation {
+    condition     = var.region != null
+    error_message = "necessario informar a regiao dos recursos"
   }
 }

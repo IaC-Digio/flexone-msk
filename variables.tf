@@ -1,10 +1,6 @@
 variable "tags" {
   type    = map(string)
-  default = {
-    terraform = "true"
-    owner = "danilo.lopes"
-    informacao = "desenvolvimento de terraform para a Digio"
-  }
+  default = {}
 }
 
 variable "create" {

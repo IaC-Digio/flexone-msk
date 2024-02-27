@@ -5,6 +5,7 @@ module "msk_cluster" {
   #- geral
   cluster_name    = "Example-Cluster"
   cluster_version = "3.5.1"
+  region = var.region
   node_numbers    = 3
   instance_type   = "kafka.t3.small"
   volume_size     = 10

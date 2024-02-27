@@ -3,6 +3,7 @@ resource "aws_cloudwatch_log_group" "this" {
 
   name              = "AmazonMSK_${var.cloudwatch_log_group_name}"
   retention_in_days = var.log_group_retention
+  kms_key_id = aws_kms_key.cloudwatch_log_group_kafka_cluster[0].arn
 
   tags = merge(
     {
@@ -10,4 +11,6 @@ resource "aws_cloudwatch_log_group" "this" {
     },
     var.tags
   )
+
+  depends_on = [ aws_kms_key.cloudwatch_log_group_kafka_cluster ]
 }

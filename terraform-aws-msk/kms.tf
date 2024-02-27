@@ -1,7 +1,7 @@
-resource "aws_kms_key" "kafka_cluster" {
+resource "aws_kms_key" "msk_cluster" {
   count = var.create ? 1 : 0
 
-  description = "chave KMS para o cluster Kafka"
+  description = "chave KMS para o cluster MSK"
   policy      = <<POLICY
 {
   "Version": "2012-10-17",
@@ -26,13 +26,71 @@ POLICY
   )
 }
 
-resource "aws_kms_alias" "kafka_cluster" {
+resource "aws_kms_alias" "msk_cluster_kms_key_alias" {
   count = var.create ? 1 : 0
 
   name          = "alias/AmazonMSK_${var.cluster_name}"
-  target_key_id = aws_kms_key.kafka_cluster[0].key_id
+  target_key_id = aws_kms_key.msk_cluster[0].key_id
 
-  depends_on = [ aws_kms_key.kafka_cluster ]
+  depends_on = [ aws_kms_key.msk_cluster ]
+}
+
+resource "aws_kms_key" "cloudwatch_log_group_kafka_cluster" {
+  count = var.create ? 1 : 0
+
+  description = "chave KMS para o cloudwatch log group do cluster MSK"
+  policy      = <<POLICY
+{
+ "Version": "2012-10-17",
+    "Id": "key-default-1",
+    "Statement": [
+        {
+            "Sid": "Enable IAM User Permissions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logs.${var.region}.amazonaws.com"
+            },
+            "Action": [
+                "kms:Encrypt*",
+                "kms:Decrypt*",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Describe*"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "ArnEquals": {
+                    "kms:EncryptionContext:aws:logs:arn": "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:AmazonMSK_${var.cloudwatch_log_group_name}"
+                }
+            }
+        }    
+    ]
+}
+POLICY
+
+  tags = merge(
+    {
+      "Name" : "AmazonMSK_${var.cloudwatch_log_group_name}"
+    },
+    var.tags
+  )
+}
+
+resource "aws_kms_alias" "cloudwatch_log_group_kafka_cluster_kms_key_alias" {
+  count = var.create ? 1 : 0
+
+  name          = "alias/AmazonMSK_${var.cloudwatch_log_group_name}"
+  target_key_id = aws_kms_key.cloudwatch_log_group_kafka_cluster[0].key_id
+
+  depends_on = [ aws_kms_key.cloudwatch_log_group_kafka_cluster ]
 }
 
 resource "aws_kms_key" "secrets_manager" {
