@@ -1,6 +1,8 @@
 variable "tags" {
   type    = map(string)
-  default = {}
+  default = {
+    terraform  = "true"
+  }
 }
 
 variable "create" {
@@ -10,5 +12,5 @@ variable "create" {
 
 variable "region" {
   type = string
-  default = "us-east-2"
+  default = "sa-east-1"
 }

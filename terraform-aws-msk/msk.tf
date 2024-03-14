@@ -25,7 +25,7 @@ resource "aws_msk_cluster" "this" {
   }
 
   encryption_info {
-    encryption_at_rest_kms_key_arn = aws_kms_key.msk_cluster[0].arn
+    encryption_at_rest_kms_key_arn = aws_kms_key.kafka_cluster[0].arn
     encryption_in_transit {
       client_broker = "TLS"
       in_cluster = true
@@ -65,7 +65,7 @@ resource "aws_msk_cluster" "this" {
 
   depends_on = [
     aws_security_group.this,
-    aws_kms_alias.msk_cluster_kms_key_alias,
+    aws_kms_alias.kafka_cluster,
     aws_cloudwatch_log_group.this,
     aws_secretsmanager_secret.this
   ]

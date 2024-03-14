@@ -8,7 +8,8 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  profile = "homologacao"
+  region = "sa-east-1"
 
   default_tags {
     tags = {

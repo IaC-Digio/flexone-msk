@@ -3,10 +3,7 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_vpc" "vpc" {
-  filter {
-    name   = "tag:Name"
-    values = [ "principal-vpc" ]
-  }
+  id = "<VPC ID>"
 }
 
 data "aws_subnets" "private" {
@@ -19,7 +16,7 @@ data "aws_subnets" "private" {
 
   filter {
     name   = "tag:Name"
-    values = ["principal-subnet-private*"]
+    values = ["<Filtro das Subnets>*"]
   }
 
   filter {
@@ -29,8 +26,5 @@ data "aws_subnets" "private" {
 }
 
 data "aws_security_group" "security_group" {
-  filter {
-    name   = "tag:Name"
-    values = [ "teste" ]
-  }
+  id = "<Security Group ID>"
 }

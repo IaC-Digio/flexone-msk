@@ -19,7 +19,8 @@ resource "aws_security_group_rule" "ingress_rules_with_cidr_blocks" {
   security_group_id = aws_security_group.this[0].id
   type              = "ingress"
 
-  cidr_blocks = [ var.ingress_rules_with_cidr_blocks[count.index]["cidr_blocks"] ]
+  cidr_blocks = compact(distinct(concat( var.ingress_rules_with_cidr_blocks[count.index]["cidr_blocks"] )))
+  # cidr_blocks = [ var.ingress_rules_with_cidr_blocks[count.index]["cidr_blocks"] ]
   description = var.ingress_rules_with_cidr_blocks[count.index]["description"]
 
   from_port = var.ingress_rules_with_cidr_blocks[count.index]["from_port"]
@@ -35,7 +36,8 @@ resource "aws_security_group_rule" "egress_rules_with_cidr_blocks" {
   security_group_id = aws_security_group.this[0].id
   type              = "egress"
 
-  cidr_blocks = [ var.egress_rules_with_cidr_blocks[count.index]["cidr_blocks"] ]
+  cidr_blocks = compact(distinct(concat( var.egress_rules_with_cidr_blocks[count.index]["cidr_blocks"] )))
+  # cidr_blocks = [ var.egress_rules_with_cidr_blocks[count.index]["cidr_blocks"] ]
   description = var.egress_rules_with_cidr_blocks[count.index]["description"]
 
   from_port = var.egress_rules_with_cidr_blocks[count.index]["from_port"]
