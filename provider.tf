@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "aws" {
-  profile = "homologacao"
-  region = "sa-east-1"
-
+  profile = ""
+  region = "us-east-2"
+  allowed_account_ids = []
   default_tags {
     tags = {
       workload    = "matera"

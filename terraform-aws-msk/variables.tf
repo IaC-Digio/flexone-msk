@@ -66,20 +66,10 @@ variable "security_groups_ids" {
   default = null
 }
 
-variable "ingress_rules_with_cidr_blocks" {
-  type = list(any)
-}
-
-variable "egress_rules_with_cidr_blocks" {
-  type = list(any)
-}
-
-variable "ingress_rules_with_security_group_id" {
-  type = list(any)
-}
-
-variable "egress_rules_with_security_group_id" {
-  type = list(any)
+variable "security_group_additional_rules" {
+  description = ""
+  type = any
+  default = {}
 }
 
 variable "create" {

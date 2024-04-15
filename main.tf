@@ -22,32 +22,31 @@ module "msk_cluster" {
   create_sg                  = true
   security_group_name        = "${local.msk-cluster}-sg"
   security_group_description = "${local.msk-cluster} sg"
-  
-  ingress_rules_with_cidr_blocks = [
-    {
-      from_port   = 9096
-      to_port     = 9096
-      protocol    = "tcp"
-      description = "allowing SASL/SCRAM authentication from VPC CIDR"
-      cidr_blocks = ["10.26.0.0/16", "10.27.0.0/16"]
-    }
-  ]
-  egress_rules_with_cidr_blocks = [
-    {
-      from_port   = 0
-      to_port     = 65535
-      protocol    = "tcp"
-      description = "allow all outside"
-      cidr_blocks = ["10.26.0.0/16", "10.27.0.0/16"]
-    }
-  ]
 
-  ingress_rules_with_security_group_id = []
-  egress_rules_with_security_group_id  = []
+  security_group_additional_rules = {
+    sasl_scram_authentication = {
+      type = "ingress"
+      from_port = 9096
+      to_port = 9096
+      protocol = "tcp"
+      description = ""
+      cidr_blocks = local.private_subnets_cidr_blocks
+    }
+
+    allow_all_egress = {
+      type = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      description = "allow all to subnets"
+      cidr_blocks = local.private_subnets_cidr_blocks
+    }
+  }
+
   security_groups_ids = []
 
   #- logging
-  cloudwatch_log_group_name = "/msk/${local.msk-cluster}"
+  cloudwatch_log_group_name = "${local.msk-cluster}"
   log_group_retention       = 14
 
   #- tags
